@@ -6,10 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
     <meta name="description" content="Central hub for {{ title }}'s web projects.">
+    <!-- Favicon support -->
+    <!-- Favicon support -->
+    <link rel="icon" href="{{ favicon }}" sizes="any">
+    <!-- Optional: Add more specific icon types if needed, but for minimal setup one is often enough or user can add more to template if really needed.
+         For now, user requested custom favicons support via MD, usually implying the main one.
+         We'll stick to replacing the href. -->
+
+    <!-- 0xProto Font (via CDN) or fallback to JetBrains Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Social Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+    <button id="theme-toggle" class="theme-btn" aria-label="Toggle theme">Auto</button>
     <main class="container">
         <header class="profile-header">
             <h1>{{ title }}</h1>
@@ -22,6 +34,60 @@
             </ul>
         </nav>
     </main>
+
+    <div class="socials">
+        {{ socials }}
+    </div>
+
+    <footer>
+        <p>{{ footer }}</p>
+    </footer>
+
+    <script>
+        const toggleBtn = document.getElementById('theme-toggle');
+        const PREFS = ['auto', 'light', 'dark'];
+        let currentMode = localStorage.getItem('theme-mode') || 'auto';
+
+        function applyTheme(mode) {
+            const root = document.documentElement;
+            const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            let isDark = false;
+            if (mode === 'dark') isDark = true;
+            else if (mode === 'light') isDark = false;
+            else if (mode === 'auto') isDark = systemDark;
+
+            if (isDark) {
+                root.classList.add('dark-theme');
+                root.classList.remove('light-theme');
+            } else {
+                root.classList.add('light-theme');
+                root.classList.remove('dark-theme');
+            }
+
+            toggleBtn.textContent = mode.charAt(0).toUpperCase() + mode.slice(1);
+        }
+
+        function cycleTheme() {
+            const currentIndex = PREFS.indexOf(currentMode);
+            const nextIndex = (currentIndex + 1) % PREFS.length;
+            currentMode = PREFS[nextIndex];
+            localStorage.setItem('theme-mode', currentMode);
+            applyTheme(currentMode);
+        }
+
+        toggleBtn.addEventListener('click', cycleTheme);
+
+        // Initial apply
+        applyTheme(currentMode);
+
+        // Listen for system changes if in auto mode
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (currentMode === 'auto') {
+                applyTheme('auto');
+            }
+        });
+    </script>
 </body>
 
 </html>

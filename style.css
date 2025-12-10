@@ -5,13 +5,16 @@
     --hover-bg: #f5f5f5;
     --border-color: #eaeaea;
     --accent-color: #000000;
-    
-    --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-    
+    --link-color: #0066cc;
+    /* Standard blue for light mode */
+
+    --font-family: 'JetBrains Mono', '0xProto Nerd Font Mono', monospace;
+
     --spacing-unit: 1rem;
     --container-width: 600px;
 }
 
+/* Default Dark Mode Preference (Browser) */
 @media (prefers-color-scheme: dark) {
     :root {
         --bg-color: #111111;
@@ -20,7 +23,35 @@
         --hover-bg: #1f1f1f;
         --border-color: #333333;
         --accent-color: #ffffff;
+        --link-color: #66b3ff;
+        /* Lighter blue for dark mode contrast */
     }
+}
+
+/* Theme Overrides */
+.light-theme {
+    --bg-color: #ffffff;
+    --text-color: #1a1a1a;
+    --secondary-text: #666666;
+    --border-color: #eaeaea;
+    --accent-color: #000000;
+    --link-color: #0066cc;
+}
+
+.dark-theme {
+    --bg-color: #111111;
+    --text-color: #ffffff;
+    --secondary-text: #a0a0a0;
+    --border-color: #333333;
+    --accent-color: #ffffff;
+    --link-color: #66b3ff;
+}
+
+@font-face {
+    font-family: '0xProto Nerd Font Mono';
+    src: url('https://cdn.jsdelivr.net/npm/0xproto@latest/fonts/0xProto-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
 }
 
 * {
@@ -36,25 +67,83 @@ body {
     line-height: 1.6;
     min-height: 100vh;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    /* Stack main and footer */
+    /* justify-content: center;  Centered via main/flex-grow now */
+    /* align-items: center; */
     padding: var(--spacing-unit);
     transition: background-color 0.3s ease, color 0.3s ease;
+    position: relative;
+    /* For theme toggle positioning */
+}
+
+/* Styles for Links */
+a {
+    color: var(--link-color);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    transition: opacity 0.2s ease;
+}
+
+a:hover {
+    opacity: 0.8;
+}
+
+/* Ensure visited links don't turn purple/low-contrast */
+a:visited {
+    color: var(--link-color);
+}
+
+.theme-btn {
+    position: fixed;
+    /* Fixed to viewport to ensure top-right positioning */
+    top: var(--spacing-unit);
+    right: var(--spacing-unit);
+    z-index: 100;
+    /* Ensure on top */
+    background: var(--bg-color);
+    /* Add opaque bg so it doesn't blend if content scrolls under */
+    border: 1px solid var(--border-color);
+    color: var(--secondary-text);
+    padding: 0.5rem 1rem;
+    font-family: var(--font-family);
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    transition: all 0.2s ease;
+}
+
+.theme-btn:hover {
+    color: var(--text-color);
+    border-color: var(--text-color);
 }
 
 .container {
     width: 100%;
     max-width: var(--container-width);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* Center content vertically */
+    flex-grow: 1;
+    /* Take available space to push footer down */
+    margin: 0 auto;
+    /* Center horizontally */
 }
 
 .profile-header {
-    margin-bottom: calc(var(--spacing-unit) * 3);
+    margin-bottom: calc(var(--spacing-unit) * 4);
+    /* Increased from 3 */
+    text-align: center;
+    /* Centered Title */
 }
 
 .profile-header h1 {
     font-size: 2rem;
     font-weight: 700;
-    margin-bottom: calc(var(--spacing-unit) * 0.5);
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
+    /* Increased from 0.5 to separate title and bio */
     letter-spacing: -0.02em;
 }
 
@@ -62,51 +151,86 @@ body {
     color: var(--secondary-text);
     font-size: 1.1rem;
     line-height: 1.5;
+    text-align: left;
+    /* Changed from center to left per request */
 }
+
+/* .links-list removed as flex-grow was causing vertical alignment issues */
 
 .links-list ul {
     list-style: none;
 }
 
+/* Remove table boundaries / borders */
 .link-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
     text-decoration: none;
-    padding: calc(var(--spacing-unit) * 1.5) 0;
-    border-bottom: 1px solid var(--border-color);
+    padding: calc(var(--spacing-unit) * 1) 0;
+    /* border-bottom: 1px solid var(--border-color); -> REMOVED */
     transition: all 0.2s ease;
 }
 
-.link-item:hover {
-    padding-left: calc(var(--spacing-unit) * 0.5);
-    padding-right: calc(var(--spacing-unit) * 0.5);
-    background-color: var(--hover-bg);
-    border-radius: 8px;
-    border-bottom-color: transparent;
+/* Hover Effect: Only lift text, no background change */
+.link-item:hover .link-title,
+.link-item:hover .link-desc {
+    transform: translateY(-2px);
+    color: var(--text-color);
+    /* Ensure high contrast on hover */
 }
 
 .link-title {
     font-weight: 600;
     color: var(--text-color);
     font-size: 1.1rem;
+    transition: transform 0.2s ease;
 }
 
 .link-desc {
     color: var(--secondary-text);
     font-size: 0.9rem;
+    transition: transform 0.2s ease;
 }
 
-/* Remove border from last item if not hovering, but difficult to do cleanly with hover effects. 
-   Instead, maybe just keep borders or make them very subtle. 
-   Let's keep the border-bottom for now as it looks structured. 
-*/
+/* Social Icons */
+.socials {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: calc(var(--spacing-unit) * 3);
+    margin-bottom: calc(var(--spacing-unit) * 3);
+    /* Increased from 1 */
+}
+
+.socials a {
+    color: var(--secondary-text);
+    font-size: 1.25rem;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.socials a:hover {
+    color: var(--text-color);
+    transform: translateY(-2px);
+}
+
+footer {
+    margin-top: 0;
+    /* Handled by flex layout */
+    padding-top: calc(var(--spacing-unit) * 2);
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--secondary-text);
+    opacity: 0.7;
+    width: 100%;
+}
 
 @media (max-width: 480px) {
     .profile-header h1 {
         font-size: 1.75rem;
     }
-    
+
     .link-item {
         flex-direction: column;
         align-items: flex-start;

@@ -7,8 +7,11 @@ def parse_markdown(file_path):
     title = ""
     bio = ""
     links = []
+    footer = ""
+    favicon = "favicon.ico" # Default
+    socials = []
     
-    parsing_links = False
+    section = "header" # header, config, links, socials, footer
     
     for line in lines:
         line = line.strip()
@@ -17,9 +20,35 @@ def parse_markdown(file_path):
             
         if line.startswith("# ") and not title:
             title = line[2:].strip()
+            section = "header"
+        
+        elif line.startswith("## Config"):
+            section = "config"
+            
         elif line.startswith("## Links"):
-            parsing_links = True
-        elif parsing_links and line.startswith("- "):
+            section = "links"
+            
+        elif line.startswith("## Socials"):
+            section = "socials"
+            
+        elif line.startswith("## Footer"):
+            section = "footer"
+            
+        elif section == "header" and not line.startswith("#"):
+            if not bio:
+                bio = line
+            else:
+                bio += " " + line
+        
+        elif section == "config":
+            if ":" in line:
+                key, value = line.split(":", 1)
+                key = key.strip().lower()
+                value = value.strip()
+                if key == "favicon":
+                    favicon = value
+                
+        elif section == "links" and line.startswith("- "):
             # Parse link format: - [Title](url) - Description
             match = re.match(r'- \[(.*?)\]\((.*?)\) - (.*)', line)
             if match:
@@ -29,12 +58,48 @@ def parse_markdown(file_path):
                     'url': link_url,
                     'desc': link_desc
                 })
-        elif not parsing_links and not bio and not line.startswith("#"):
-            bio = line
 
-    return title, bio, links
+        elif section == "socials" and line.startswith("- "):
+            # Parse social format: - [Title](url)
+            match = re.match(r'- \[(.*?)\]\((.*?)\)', line)
+            if match:
+                social_title, social_url = match.groups()
+                socials.append({
+                    'title': social_title,
+                    'url': social_url
+                })
+        
+        elif section == "footer":
+             footer = line
 
-def generate_html(title, bio, links, template_path, output_path):
+    return title, bio, links, footer, favicon, socials
+
+def get_icon_class(name):
+    name = name.lower()
+    if "github" in name: return "fa-brands fa-github"
+    if "twitter" in name: return "fa-brands fa-twitter"
+    if "linkedin" in name: return "fa-brands fa-linkedin"
+    if "instagram" in name: return "fa-brands fa-instagram"
+    if "bluesky" in name: return "fa-brands fa-bluesky"
+    if "steam" in name: return "fa-brands fa-steam"
+    if "youtube" in name: return "fa-brands fa-youtube"
+    if "reddit" in name: return "fa-brands fa-reddit"
+    if "facebook" in name: return "fa-brands fa-facebook"
+    if "discord" in name: return "fa-brands fa-discord"
+    if "email" in name or "mail" in name: return "fa-solid fa-envelope"
+    return "fa-solid fa-link"
+
+def render_markdown(text):
+    if not text: return ""
+    # Links: [text](url) -> <a href="url">text</a>
+    text = re.sub(r'\[(.*?)\]\((.*?)\)', r'<a href="\2">\1</a>', text)
+    # Bold: **text** -> <strong>text</strong>
+    text = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', text)
+    # Italics: *text* -> <em>text</em> (Simple *text* only, not nested/complex)
+    text = re.sub(r'\*(.*?)\*', r'<em>\1</em>', text)
+    return text
+
+def generate_html(title, bio, links, footer, favicon, socials, template_path, output_path):
     with open(template_path, 'r') as f:
         template = f.read()
 
@@ -43,14 +108,26 @@ def generate_html(title, bio, links, template_path, output_path):
         links_html += f"""
                 <li>
                     <a href="{link['url']}" class="link-item">
-                        <span class="link-title">{link['title']}</span>
-                        <span class="link-desc">{link['desc']}</span>
+                        <span class="link-title">{render_markdown(link['title'])}</span>
+                        <span class="link-desc">{render_markdown(link['desc'])}</span>
                     </a>
                 </li>"""
+
+    socials_html = ""
+    for social in socials:
+        icon_class = get_icon_class(social['title'])
+        socials_html += f'<a href="{social["url"]}" target="_blank" aria-label="{social["title"]}"><i class="{icon_class}"></i></a>'
+
+    # Apply markdown rendering to Bio and Footer
+    bio = render_markdown(bio)
+    footer = render_markdown(footer)
 
     html = template.replace('{{ title }}', title)
     html = html.replace('{{ bio }}', bio)
     html = html.replace('{{ links }}', links_html)
+    html = html.replace('{{ footer }}', footer)
+    html = html.replace('{{ favicon }}', favicon)
+    html = html.replace('{{ socials }}', socials_html)
 
     with open(output_path, 'w') as f:
         f.write("<!-- This file is auto-generated by build.py. Edits will be overwritten. -->\n")
@@ -59,5 +136,6 @@ def generate_html(title, bio, links, template_path, output_path):
     print(f"Successfully generated {output_path}")
 
 if __name__ == "__main__":
-    title, bio, links = parse_markdown("content.md")
-    generate_html(title, bio, links, "template.html", "index.html")
+    title, bio, links, footer, favicon, socials = parse_markdown("content.md")
+    generate_html(title, bio, links, footer, favicon, socials, "template.html", "index.html")
+

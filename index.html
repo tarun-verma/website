@@ -5,16 +5,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tarun Verma</title>
-    <meta name="description" content="Central hub for Tarun Verma's web projects.">
+    <title>sublimation</title>
+    <meta name="description" content="Central hub for sublimation's web projects.">
+    <!-- Favicon support -->
+    <!-- Favicon support -->
+    <link rel="icon" href="public/favicon.png" sizes="any">
+    <!-- Optional: Add more specific icon types if needed, but for minimal setup one is often enough or user can add more to template if really needed.
+         For now, user requested custom favicons support via MD, usually implying the main one.
+         We'll stick to replacing the href. -->
+
+    <!-- 0xProto Font (via CDN) or fallback to JetBrains Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Social Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+    <button id="theme-toggle" class="theme-btn" aria-label="Toggle theme">Auto</button>
     <main class="container">
         <header class="profile-header">
-            <h1>Tarun Verma</h1>
-            <p class="bio">Welcome to my corner of the internet. Here you'll find a collection of my projects, photography, and writings.</p>
+            <h1>sublimation</h1>
+            <p class="bio">hey, my name's Tarun. thanks for visiting my page :) <br> <br> i work as an <a href="https://en.wikipedia.org/wiki/Site_reliability_engineering">sre</a>, and currently split my time b/w London and Delhi. i play the bass guitar and write mostly meh fiction. i like the smell of garlic frying. <br> <br> following are some of my websites, categorized by theme:</p>
         </header>
 
         <nav class="links-list">
@@ -22,25 +34,85 @@
                 
                 <li>
                     <a href="https://photos.vrma.net" class="link-item">
-                        <span class="link-title">Photography</span>
-                        <span class="link-desc">photos.vrma.net</span>
+                        <span class="link-title">photos.vrma.net</span>
+                        <span class="link-desc">my amateur attempts at photography</span>
                     </a>
                 </li>
                 <li>
                     <a href="https://eng.vrma.net" class="link-item">
-                        <span class="link-title">Engineering Blog</span>
-                        <span class="link-desc">eng.vrma.net</span>
+                        <span class="link-title">eng.vrma.net</span>
+                        <span class="link-desc">engineering blog</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="link-item">
-                        <span class="link-title">About Me</span>
-                        <span class="link-desc">More about who I am</span>
+                    <a href="https://thoughts.vrma.net" class="link-item">
+                        <span class="link-title">thoughts.vrma.net</span>
+                        <span class="link-desc">psychobabble</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://books.vrma.net" class="link-item">
+                        <span class="link-title">books.vrma.net</span>
+                        <span class="link-desc">reading list</span>
                     </a>
                 </li>
             </ul>
         </nav>
     </main>
+
+    <div class="socials">
+        <a href="https://github.com/tarun-verma" target="_blank" aria-label="GitHub"><i class="fa-brands fa-github"></i></a><a href="https://bsky.app/profile/wtfta.run" target="_blank" aria-label="Bluesky"><i class="fa-brands fa-bluesky"></i></a><a href="https://linkedin.com/in/tarun08" target="_blank" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a><a href="https://steamcommunity.com/id/comfortablydumb/" target="_blank" aria-label="Steam"><i class="fa-brands fa-steam"></i></a><a href="mailto:tr.vrma@gmail.com" target="_blank" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+    </div>
+
+    <footer>
+        <p>© 2025 Tarun Verma <br> Views expressed are solely my own, unless mentioned otherwise.</p>
+    </footer>
+
+    <script>
+        const toggleBtn = document.getElementById('theme-toggle');
+        const PREFS = ['auto', 'light', 'dark'];
+        let currentMode = localStorage.getItem('theme-mode') || 'auto';
+
+        function applyTheme(mode) {
+            const root = document.documentElement;
+            const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            let isDark = false;
+            if (mode === 'dark') isDark = true;
+            else if (mode === 'light') isDark = false;
+            else if (mode === 'auto') isDark = systemDark;
+
+            if (isDark) {
+                root.classList.add('dark-theme');
+                root.classList.remove('light-theme');
+            } else {
+                root.classList.add('light-theme');
+                root.classList.remove('dark-theme');
+            }
+
+            toggleBtn.textContent = mode.charAt(0).toUpperCase() + mode.slice(1);
+        }
+
+        function cycleTheme() {
+            const currentIndex = PREFS.indexOf(currentMode);
+            const nextIndex = (currentIndex + 1) % PREFS.length;
+            currentMode = PREFS[nextIndex];
+            localStorage.setItem('theme-mode', currentMode);
+            applyTheme(currentMode);
+        }
+
+        toggleBtn.addEventListener('click', cycleTheme);
+
+        // Initial apply
+        applyTheme(currentMode);
+
+        // Listen for system changes if in auto mode
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (currentMode === 'auto') {
+                applyTheme('auto');
+            }
+        });
+    </script>
 </body>
 
 </html>
