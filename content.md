@@ -15,6 +15,7 @@ Favicon: public/favicon.png
 - [eng.vrma.net](https://eng.vrma.net) - engineering blog
 - [thoughts.vrma.net](https://thoughts.vrma.net) - psychobabble
 - [books.vrma.net](https://books.vrma.net) - reading list
+- [music.vrma.net](https://music.vrma.net) - bass covers
 
 ## Socials
 - [GitHub](https://github.com/tarun-verma)
@@ -25,4 +26,4 @@ Favicon: public/favicon.png
 
 
 ## Footer
-© 2025 Tarun Verma <br> Views expressed are solely my own, unless mentioned otherwise.
+© 2025 Tarun Verma. <br> Views expressed are solely my own, unless mentioned otherwise.
