@@ -16,6 +16,7 @@ Favicon: public/favicon.png
 - [thoughts.vrma.net](https://thoughts.vrma.net) - psychobabble
 - [books.vrma.net](https://books.vrma.net) - reading list
 - [music.vrma.net](https://music.vrma.net) - bass covers
+- [stuff.vrma.net](https://stuff.vrma.net) - stuff I like and recommend
 
 ## Socials
 - [GitHub](https://github.com/tarun-verma)
