@@ -26,4 +26,4 @@ Favicon: public/favicon.png
 
 
 ## Footer
-© 2025 Tarun Verma. <br> Views expressed are solely my own, unless mentioned otherwise.
+© 2025 Tarun Verma <br> Views expressed are solely my own, unless mentioned otherwise.
