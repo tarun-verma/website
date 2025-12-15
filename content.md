@@ -17,6 +17,7 @@ Favicon: public/favicon.png
 - [books.vrma.net](https://books.vrma.net) - reading list
 - [music.vrma.net](https://music.vrma.net) - bass covers
 - [stuff.vrma.net](https://stuff.vrma.net) - stuff I like and recommend
+- [cv.vrma.net](https://cv.vrma.net) - my CV
 
 ## Socials
 - [GitHub](https://github.com/tarun-verma)
