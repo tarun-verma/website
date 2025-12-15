@@ -124,8 +124,10 @@ a:visited {
     max-width: var(--container-width);
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    /* Center content vertically */
+    justify-content: flex-start;
+    /* Top align content */
+    padding-top: 8rem;
+    /* Push content down below fixed toggle */
     flex-grow: 1;
     /* Take available space to push footer down */
     margin: 0 auto;
@@ -227,6 +229,10 @@ footer {
 }
 
 @media (max-width: 480px) {
+    .container {
+        padding-top: 5rem;
+    }
+
     .profile-header h1 {
         font-size: 1.75rem;
     }
