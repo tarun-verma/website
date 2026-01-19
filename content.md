@@ -1,12 +1,7 @@
-# sublimation
+# so-so
 
-hey, my name's Tarun. thanks for visiting my page :)
-<br>
-<br>
-i work as an [sre](https://en.wikipedia.org/wiki/Site_reliability_engineering), and currently split my time b/w London and Delhi. i play the bass guitar and write mostly meh fiction. i like the smell of garlic frying.
-<br>
-<br>
-following are some of my websites, categorized by theme:
+<p style="text-align:center;"><b>?</b></p>
+
 ## Config
 Favicon: public/favicon.png
 
