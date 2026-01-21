@@ -6,7 +6,7 @@
 Favicon: public/favicon.png
 
 ## Links
-- [photos.vrma.net](https://photos.vrma.net) - a few photographs (by myself & friends)
+- [photos.vrma.net](https://photos.vrma.net) - photographs (by myself & friends)
 - [eng.vrma.net](https://eng.vrma.net) - engineering blog
 - [thoughts.vrma.net](https://thoughts.vrma.net) - psychobabble
 - [books.vrma.net](https://books.vrma.net) - reading list
