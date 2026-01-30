@@ -16,7 +16,7 @@ Favicon: public/favicon.png
 
 ## Socials
 - [GitHub](https://github.com/tarun-verma)
-- [Bluesky](https://bsky.app/profile/wtfta.run)
+- [Bluesky](https://bsky.app/profile/tescodemon.bsky.social)
 - [LinkedIn](https://linkedin.com/in/tarun08)
 - [Steam](https://steamcommunity.com/id/comfortablydumb/)
 - [Email](mailto:tr.vrma@gmail.com)
