@@ -17,10 +17,10 @@ Favicon: public/favicon.png
 ## Socials
 - [GitHub](https://github.com/tarun-verma)
 - [Bluesky](https://bsky.app/profile/tescodemon.bsky.social)
+- [Instagram](https://www.instagram.com/fretfulfrog/)
 - [LinkedIn](https://linkedin.com/in/tarun08)
 - [Steam](https://steamcommunity.com/id/comfortablydumb/)
 - [Email](mailto:tr.vrma@gmail.com)
-
 
 ## Footer
 © 2025 Tarun Verma <br> Views expressed are solely my own, unless mentioned otherwise.
